@@ -68,10 +68,21 @@ static char *get_line_feed(t_list **chunks) {
 
   char *tail = ft_memchr(node->content, '\n', node->size);
   len = tail - (char *)node->content + 1;
+
+//  printf("> node->size: %zu\n", node->size);
+//  printf(">        len: %zu\n", node->size);
+
+
   buffer = (char *)malloc(len + 1);
   buffer[len] = 0;
   ft_memcpy(buffer, node->content, len);
 
+  if (len == node->size) {
+    list_clear(&node, free);
+    return buffer;
+  }
+//  printf(">        len: %zu\n", len);
+//  printf("> node->size: %zu\n", node->size);
 
   char *new_content = (char *)malloc(node->size - len);
   ft_memcpy(new_content, node->content + len, node->size - len);
