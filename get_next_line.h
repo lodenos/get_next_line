@@ -8,24 +8,21 @@
 
 #include <sys/types.h>
 
+#define MAX_FD 4096
+
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 5
+#define BUFFER_SIZE 1024
 #endif
 
-#include <stdio.h>
-
-typedef struct s_list {
-  void *content;
+typedef struct s_gnl_list {
+  char buffer[BUFFER_SIZE];
+  size_t index;
   size_t size;
-  struct s_list *next;
-} t_list;
+  struct s_gnl_list *next;
+} t_gnl_list;
 
-void *ft_memcpy(void *dst, void const *src, size_t n);
-void *ft_memchr(char const *ptr, int c, size_t n);
-
-void list_clear(t_list **list, void (*del)(void *));
-t_list *list_new(void *content, size_t size);
-t_list *list_push(t_list **list, t_list *node);
+void *ft_memchr(char const *, int, size_t);
+void *ft_memcpy(void *, void const *, size_t);
 
 char *get_next_line(int fd);
 
