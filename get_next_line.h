@@ -11,7 +11,7 @@
 #define MAX_FD 4096
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 42
 #endif
 
 typedef struct s_gnl_list {
