@@ -1,7 +1,5 @@
 #include "get_next_line.h"
 
-#include <stdio.h>
-
 static t_gnl_list *gnl_list_push(t_gnl_list **list, t_gnl_list *node) {
   t_gnl_list *head = *list;
 
@@ -16,33 +14,22 @@ static t_gnl_list *gnl_list_push(t_gnl_list **list, t_gnl_list *node) {
   head->next = node;
   return *list;
 }
-/*
+
 static size_t size_line_feed(t_gnl_list *chunks) {
   size_t size;
   char *match;
 
-//  printf(">    fn: size_line_fill\n");
-
   size = 0;
   while (chunks) {
-//    printf(">    fn: size_line_fill - while\n");
-
     match = ft_memchr(chunks->buffer + chunks->index, '\n',
       chunks->size - chunks->index);
-    if (match) {
-//      printf(">    fn: size_line_fill - match - return\n");
-      return size + chunks->size;
-    }
+    if (match)
+      return size + match - (chunks->buffer + chunks->index) + 1;
     size += chunks->size;
     chunks = chunks->next;
   }
-
-
-//  printf(">    fn: size_line_fill - return\n");
-
   return size;
 }
-*/
 
 static t_gnl_list *dump_line_fill(t_gnl_list *chunk, char *buffer,
     size_t *index) {
@@ -53,10 +40,8 @@ static t_gnl_list *dump_line_fill(t_gnl_list *chunk, char *buffer,
     ft_memcpy(buffer + *index, chunk->buffer + chunk->index,
       match - (chunk->buffer + chunk->index) + 1);
     chunk->index += match - (chunk->buffer + chunk->index) + 1;
-    if (chunk->index >= chunk->size) {
-      *index = 123456;
+    if (chunk->index >= chunk->size)
       return chunk;
-    }
     return NULL;
   }
   ft_memcpy(buffer + *index, chunk->buffer + chunk->index,
@@ -72,17 +57,14 @@ static char *dump_line_feed(t_gnl_list **chunks) {
 
   if (!*chunks)
     return NULL;
-  buffer = (char *)calloc(1, 10000000);
+  size = size_line_feed(*chunks);
+  buffer = (char *)malloc(size + 1);
   if (!buffer)
     return NULL;
+  buffer[size] = 0;
   size = 0;
   while (*chunks) {
     chunk = dump_line_fill(*chunks, buffer, &size);
-    if (size == 123456) {
-      *chunks = (*chunks)->next;
-      free(chunk);
-      return buffer;
-    }
     if (!chunk)
       return buffer;
     *chunks = (*chunks)->next;
