@@ -40,8 +40,10 @@ static t_gnl_list *dump_line_fill(t_gnl_list *chunk, char *buffer,
     ft_memcpy(buffer + *index, chunk->buffer + chunk->index,
       match - (chunk->buffer + chunk->index) + 1);
     chunk->index += match - (chunk->buffer + chunk->index) + 1;
-    if (chunk->index >= chunk->size)
+    if (chunk->index >= chunk->size) {
+      *index = SIZE_MAX;
       return chunk;
+    }
     return NULL;
   }
   ft_memcpy(buffer + *index, chunk->buffer + chunk->index,
@@ -66,9 +68,11 @@ static char *dump_line_feed(t_gnl_list **chunks) {
   while (*chunks) {
     chunk = dump_line_fill(*chunks, buffer, &size);
     if (!chunk)
-      return buffer;
+      break ;
     *chunks = (*chunks)->next;
     free(chunk);
+    if (size == SIZE_MAX)
+      break ;
   }
   return buffer;
 }
@@ -80,7 +84,7 @@ char *get_next_line(int fd) {
 
   if (BUFFER_SIZE < 1 || fd < 0 || fd > MAX_FD)
     return NULL;
-  while (1) {
+  while (true) {
     node = (t_gnl_list *)malloc(sizeof(t_gnl_list));
     if (!node)
       return NULL;
