@@ -88,7 +88,7 @@ char *get_next_line(int fd) {
     node = (t_gnl_list *)malloc(sizeof(t_gnl_list));
     if (!node)
       return NULL;
-    node->index = 0;
+    *node = (t_gnl_list){ 0 };
     size = read(fd, node->buffer, BUFFER_SIZE);
     if (size < 1) {
       free(node);
