@@ -1,20 +1,5 @@
 #include "get_next_line.h"
 
-static t_gnl_list *gnl_list_push(t_gnl_list **list, t_gnl_list *node) {
-  t_gnl_list *head = *list;
-
-  if (!node)
-    return head;
-  if (!head) {
-    *list = node;
-    return node;
-  }
-  while (head->next)
-    head = head->next;
-  head->next = node;
-  return *list;
-}
-
 static char *create_buffer_line_feed(t_gnl_list *chunks, t_ptr_char *buffer) {
   t_ptr_char head;
   char *match;
@@ -87,12 +72,18 @@ char *get_next_line(int fd) {
     return NULL;
   while (true) {
     node = (t_gnl_list *)malloc(sizeof(t_gnl_list));
-    if (!node)
+    if (!node) {
+      gnl_list_clear(&chunks);
       return NULL;
+    }
     *node = (t_gnl_list){ 0 };
     size = read(fd, node->buffer, BUFFER_SIZE);
     if (size < 1) {
       free(node);
+      if (size == -1)  {
+        gnl_list_clear(&chunks);
+        return NULL;
+      }
       break ;
     }
     node->size = size;
@@ -100,5 +91,8 @@ char *get_next_line(int fd) {
     if (ft_memchr(node->buffer, '\n', node->size))
       break ;
   }
-  return dump_line_feed(&chunks);
+  char *buffer = dump_line_feed(&chunks);
+  if (!buffer)
+    gnl_list_clear(&chunks);
+  return buffer;
 }
