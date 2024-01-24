@@ -13,7 +13,7 @@
 #define MAX_FD 4096
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 10
 #endif
 
 typedef struct s_gnl_list {
@@ -23,9 +23,14 @@ typedef struct s_gnl_list {
   struct s_gnl_list *next;
 } t_gnl_list;
 
+typedef struct s_ptr_char {
+  char *data;
+  size_t index;
+  size_t size;
+} t_ptr_char;
+
 void *ft_memchr(char const *, int, size_t);
 void *ft_memcpy(void *, void const *, size_t);
-
 char *get_next_line(int fd);
 
 #endif
