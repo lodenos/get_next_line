@@ -32,7 +32,6 @@ typedef struct s_ptr_char {
 void *ft_memchr(char const *, int, size_t);
 void *ft_memcpy(void *, void const *, size_t);
 char *get_next_line(int fd);
-void gnl_list_clear(t_gnl_list **);
 t_gnl_list *gnl_list_push(t_gnl_list **, t_gnl_list *);
 
 #endif

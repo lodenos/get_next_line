@@ -20,17 +20,6 @@ void *ft_memcpy(void *dst, void const *src, size_t n) {
   return head;
 }
 
-void gnl_list_clear(t_gnl_list **list) {
-  t_gnl_list *indirect;
-
-  while (*list) {
-    indirect = (*list)->next;
-    free(*list);
-    *list = indirect;
-  }
-  *list = NULL;
-}
-
 t_gnl_list *gnl_list_push(t_gnl_list **list, t_gnl_list *node) {
   t_gnl_list *head = *list;
 

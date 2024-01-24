@@ -50,11 +50,18 @@ static char *dump_line_feed(t_gnl_list **chunks, bool dump) {
   t_ptr_char buffer;
   t_gnl_list *chunk;
 
-  if (dump || !*chunks || !create_buffer_line_feed(*chunks, &buffer)) {
-    gnl_list_clear(chunks);
+  if (dump || !*chunks || !create_buffer_line_feed(*chunks, &buffer))
+  {
+    while (*chunks)
+    {
+      chunk = (*chunks)->next;
+      free(*chunks);
+      *chunks = chunk;
+    }
     return NULL;
   }
-  while (*chunks) {
+  while (*chunks)
+  {
     chunk = dump_line_fill(*chunks, &buffer);
     if (!chunk)
       break ;
@@ -63,8 +70,6 @@ static char *dump_line_feed(t_gnl_list **chunks, bool dump) {
     if (buffer.index == SIZE_MAX)
       break ;
   }
-  if (!buffer.data)
-    gnl_list_clear(chunks);
   return buffer.data;
 }
 
