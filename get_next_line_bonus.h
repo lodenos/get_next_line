@@ -1,5 +1,5 @@
-#ifndef GET_NEXT_LINE
-#define GET_NEXT_LINE
+#ifndef GET_NEXT_LINE_BONUS
+#define GET_NEXT_LINE_BONUS
 
 #include <limits.h>
 #include <stdbool.h>
